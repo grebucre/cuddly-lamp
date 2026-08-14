@@ -3,7 +3,7 @@ version: 2.1
 # 1. Define the job once
 jobs:
   ubuntu-job:
-    # Use the Machine executor to get a full Ubuntu VM instead of a Docker container
+    # Use the Machine executor to get a full Ubuntu VM instead of a Docker containe
     machine:
       image: ubuntu-2204:current
     
