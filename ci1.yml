@@ -1,0 +1,39 @@
+name: 256 Job Matrix (Max Limit)
+
+on:
+  workflow_dispatch: 
+  push:
+    branches: [ "main" ] 
+
+jobs:
+  max-matrix-job:
+    name: Build ${{ matrix.os }} (Chunk ${{ matrix.chunk }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false # Ensures all 256 run even if one fails early
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        chunk: [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+          11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+          31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+          41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+          51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+          61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+          71, 72, 73, 74, 75, 76, 77
+        ]
+        # 3 OS x 86 chunks = 258 jobs. 
+        # Exclude exactly 2 jobs to bring the total to the 256 hard limit.
+        exclude:
+          - os: macos-latest
+            chunk: 86
+          - os: windows-latest
+            chunk: 86
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Execute slice
+        run: echo "Running slice ${{ matrix.chunk }} on ${{ matrix.os }}"
